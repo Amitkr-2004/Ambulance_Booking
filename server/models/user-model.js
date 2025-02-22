@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken")
 
 const userSchema = new mongoose.Schema({
     username:{
@@ -39,7 +40,6 @@ const userSchema = new mongoose.Schema({
 //define the model or collection name
 
 userSchema.pre('save',async function(){   //middleware used for encryption of password
-    console.log(this);
     const user = this;
 
     if(!user.isModified('password')){
@@ -54,7 +54,27 @@ userSchema.pre('save',async function(){   //middleware used for encryption of pa
     catch(e){
         next(e);
     }
-})
+});
+
+//JWT token used for session login upto 30d
+userSchema.methods.generateToken = async function(){
+    try{
+        return jwt.sign({
+            usedId:this._id.toString(),
+            email:this.email,
+            isAdmin:this.isAdmin
+        },
+        process.env.SECRET_KEY,
+        {
+            expiresIn:'30d',
+        }
+    );
+    }
+    catch(e){
+        console.error(e);
+    }
+}
+
 
 const User = new mongoose.model("User",userSchema);
 

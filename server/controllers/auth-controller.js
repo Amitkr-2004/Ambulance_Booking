@@ -18,16 +18,18 @@ const register = async(req,res) =>{
 
         const UserExist =await User.findOne({email});
         if(UserExist){
-            return res.status(400).json({msg:"User Already Exists"});
+            return res.status(400).send({msg:"User Already Exists"});
         }
         const newUser = await User.create({username,contact,email,password,city});
-        
-        console.log(newUser)
 
-        res.status(200).json({msg:newUser});
+        res.status(200).send({
+            msg:"Registration Completed",
+            token:await newUser.generateToken(),
+            userId:newUser._id.toString()
+        });
     }
     catch{
-        res.status(500).json({msg:"Internal Server error"});
+        res.status(500).send({msg:"Internal Server error"});
     }
 }
 //login page logic

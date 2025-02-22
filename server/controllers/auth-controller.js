@@ -1,3 +1,5 @@
+const User=require("../models/user-model");
+
 
 //home page logic
 const home = async(req,res) =>{
@@ -12,11 +14,20 @@ const home = async(req,res) =>{
 //register page logic
 const register = async(req,res) =>{
     try{
-        console.log(req.body)
-        res.status(200).send({msg:req.body})
+        const {username,contact,email,password,city} = req.body;
+
+        const UserExist =await User.findOne({email});
+        if(UserExist){
+            return res.status(400).json({msg:"User Already Exists"});
+        }
+        const newUser = await User.create({username,contact,email,password,city});
+        
+        console.log(newUser)
+
+        res.status(200).json({msg:newUser});
     }
-    catch(e){
-        res.status(500).send("Internal Server error")
+    catch{
+        res.status(500).json({msg:"Internal Server error"});
     }
 }
 //login page logic

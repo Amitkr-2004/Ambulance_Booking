@@ -1,4 +1,5 @@
 const User=require("../models/user-model");
+const bcrypt=require('bcrypt')
 
 
 //home page logic
@@ -28,17 +29,35 @@ const register = async(req,res) =>{
             userId:newUser._id.toString()
         });
     }
-    catch{
-        res.status(500).send({msg:"Internal Server error"});
+    catch(e){
+        next(e);
     }
 }
 //login page logic
 const login = async(req,res) =>{
     try{
-        res.status(200).send("Hello from server side from login")
+        const {email,password} = req.body;
+        const UserExist = await User.findOne({email});
+        if(!UserExist){
+            return res.status(400).send({msg:"Invalid Credentials"});
+        }
+        else{
+            const user = await UserExist.ComparePassword(password);
+
+            if(user){
+                res.status(200).send({
+                    msg:"Login Completed",
+                    token:await UserExist.generateToken(),
+                    userId:UserExist._id.toString()
+                });
+            }
+            else{
+                res.status(401).send({msg:"Invalid email or password"});
+            }
+        }
     }
     catch(e){
-        res.status(400).send(`Error found -> ${e}`)
+        next(e)
     }
 }
 //about page logic
@@ -50,14 +69,5 @@ const about = async(req,res) =>{
         res.status(400).send(`Error found -> ${e}`)
     }
 }
-//contact page logic
-const contact = async(req,res) =>{
-    try{
-        res.status(200).send("Hello from server side from contact")
-    }
-    catch(e){
-        res.status(400).send(`Error found -> ${e}`)
-    }
-}
 
-module.exports={home,register,login,about,contact};
+module.exports={home,register,login,about};

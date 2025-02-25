@@ -56,6 +56,10 @@ userSchema.pre('save',async function(){   //middleware used for encryption of pa
     }
 });
 
+userSchema.methods.ComparePassword = async function(password){
+    return await bcrypt.compare(password,this.password);
+}
+
 //JWT token used for session login upto 30d
 userSchema.methods.generateToken = async function(){
     try{

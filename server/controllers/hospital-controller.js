@@ -11,4 +11,15 @@ const hospitalForm = async(req,res) =>{
     }
 }
 
-module.exports = hospitalForm;
+const hospitalInfo = async(req,res) =>{
+    try{
+        const city='patna';
+        const hospitalData=await Hospital.find({city});
+        return res.status(200).send({msg:hospitalData});
+    }
+    catch(e){
+        res.status(500).send({msg:"Error in fetching data"});
+    }
+}
+
+module.exports = {hospitalForm,hospitalInfo};

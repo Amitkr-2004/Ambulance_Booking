@@ -2,14 +2,18 @@ const express = require("express");
 const router=express.Router();
 const authController=require("../controllers/auth-controller");
 const validate = require("../middlewares/validate-middleware");
-const {signupSchema,loginSchema} = require('../validators/auth-validators');
+const {UserSignupSchema,UserLoginSchema,DriverSignupSchema,DriverLoginSchema} = require('../validators/auth-validators');
 
 router.route("/").get(authController.home);
 
-router.route("/register").post(validate(signupSchema),authController.register);
+router.route("/register/user-registration").post(validate(UserSignupSchema),authController.registerUser);
 
-router.route("/login").post(validate(loginSchema),authController.login);
+router.route("/login/user-login").post(validate(UserLoginSchema),authController.loginUser);
 
-router.route("/about").get(authController.about);
+router.route("/register/driver-registration").post(validate(DriverSignupSchema),authController.registerDriver);
+
+router.route("/login/driver-login").post(validate(DriverLoginSchema),authController.loginDriver);
+
+// router.route("/about").get(authController.about);
 
 module.exports=router;

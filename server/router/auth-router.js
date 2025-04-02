@@ -3,6 +3,7 @@ const router=express.Router();
 const authController=require("../controllers/auth-controller");
 const validate = require("../middlewares/validate-middleware");
 const {UserSignupSchema,UserLoginSchema,DriverSignupSchema,DriverLoginSchema} = require('../validators/auth-validators');
+const authMiddleware=require("../middlewares/auth-middleware")
 
 router.route("/").get(authController.home);
 
@@ -14,6 +15,6 @@ router.route("/register/driver-registration").post(validate(DriverSignupSchema),
 
 router.route("/login/driver-login").post(validate(DriverLoginSchema),authController.loginDriver);
 
-// router.route("/about").get(authController.about);
+router.route("/user").get(authMiddleware,authController.user);
 
 module.exports=router;

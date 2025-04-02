@@ -7,7 +7,7 @@ const DriverSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    contact:{
+    phone:{
         type:String,
         required:true,
     },
@@ -25,19 +25,19 @@ const DriverSchema = new mongoose.Schema({
     },
     vehicleNo:{
         type:String,
-        required:true
+        required:true,
     },
     isDriver:{
         type:Boolean,
-        default:false
+        default:false,
     },
     isAdmin:{
         type:Boolean,
-        default:false
+        default:false,
     },
     isVerified:{
         type:Boolean,
-        default:false
+        default:false,
     }
 });
 
@@ -68,7 +68,7 @@ DriverSchema.methods.ComparePassword = async function(password){
 DriverSchema.methods.generateToken = async function(){
     try{
         return jwt.sign({
-            usedId:this._id.toString(),
+            userId:this._id.toString(),
             email:this.email,
             isAdmin:this.isAdmin
         },

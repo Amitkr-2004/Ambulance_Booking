@@ -16,6 +16,21 @@ export const AuthProvider = ({children}) =>{
     //!for final hosting
     const API = import.meta.env.VITE_APP_URI_API;// for the hosting purpose
 
+    const [locationState, setLocationState] = useState({
+        pickup: null,
+        dropoffCity: "",
+        dropoffHospital: ""
+    });
+    // NEW: Clear location state
+    const clearLocationState = () => {
+        setLocationState({
+            pickup: null,
+            dropoffCity: "",
+            dropoffHospital: ""
+        });
+    };
+
+
     const storeTokenInLS = (serverToken) =>{
         setToken(serverToken);
         return localStorage.setItem('token', serverToken);
@@ -84,7 +99,10 @@ export const AuthProvider = ({children}) =>{
 
     return (
         //step 2--> creating the provider
-        <AuthContext.Provider value = {{isLoggedIn,storeTokenInLS, LogoutUser, user, services, authorizationToken, isLoading, API}} >
+        <AuthContext.Provider value = {{isLoggedIn,storeTokenInLS, LogoutUser, user, services, authorizationToken, isLoading, API,
+            locationState,
+            setLocationState,
+            clearLocationState}} >
             {children}
         </AuthContext.Provider>
     )

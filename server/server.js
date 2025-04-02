@@ -6,6 +6,15 @@ const contactForm=require("./router/contact-router");
 const hospitalRoute=require('./router/hospital-router')
 const connectDb=require("./utils/db");
 const errorMiddleware = require("./middlewares/error-middleware");
+const cors=require("cors")
+
+const corsOption = {
+    origin:"http://localhost:5173",
+    methods:"POST,GET,PUT,PATCH,DELETE",
+    credentials:true,
+}
+
+app.use(cors(corsOption))
 
 app.use(express.json());    //middleware used to make backend compatible for fetching and sending json date
 

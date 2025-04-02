@@ -9,6 +9,7 @@ export const RiderSignup = () =>{
         email: "",
         phone: "",
         password: "",
+        city:"",
     });
 
     const navigate = useNavigate();
@@ -33,7 +34,7 @@ export const RiderSignup = () =>{
         console.log(user);
 
         try {
-            const response = await fetch(`${API}/api/auth/register`,{
+            const response = await fetch(`${API}/api/auth/register/user-registration`,{
                 method: "POST", 
                 headers:{
                     'Content-Type': "application/json",
@@ -48,7 +49,7 @@ export const RiderSignup = () =>{
                 storeTokenInLS(res_data.token);
                 // localStorage.setItem("token", res_data.token); //edit-->we used funciton instead in store folder>>context API
 
-                setUser({username: "",email: "",phone: "",password: "",});
+                setUser({username: "",email: "",phone: "",password: "",city: "",});
                 toast.success("Registration successful");
                 navigate("/"); //after signup redirect to login
             }else{
@@ -140,7 +141,18 @@ export const RiderSignup = () =>{
                                         onChange={handleInput}   
                                     />
                                 </div>
-                             
+                                <div>
+                                    <label htmlFor="city">city</label>
+                                    <input
+                                        name="city"
+                                        placeholder="enter your  city"
+                                        id="city" 
+                                        required
+                                        autoComplete="off" 
+                                        value={user.city}
+                                        onChange={handleInput}   
+                                    />
+                                </div>
 
                                 <br />
 

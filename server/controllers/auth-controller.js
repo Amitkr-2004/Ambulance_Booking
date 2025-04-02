@@ -16,13 +16,13 @@ const home = async(req,res) =>{
 //register page logic for users
 const registerUser = async(req,res) =>{
     try{
-        const {username,contact,email,password,city} = req.body;
+        const {username,phone,email,password,city} = req.body;
 
         const UserExist =await User.findOne({email});
         if(UserExist){
-            return res.status(400).send({msg:"User Already Exists"});
+            return res.status(400).send({message:"User Already Exists"});
         }
-        const newUser = await User.create({username,contact,email,password,city});
+        const newUser = await User.create({username,phone,email,password,city});
 
         res.status(200).send({
             msg:"Registration Completed",
@@ -39,13 +39,13 @@ const registerUser = async(req,res) =>{
 //register page logic for driver
 const registerDriver = async(req,res) =>{
     try{
-        const {username,contact,email,password,city,vehicleNo} = req.body;
+        const {username,email,phone,password,city,vehicleNo} = req.body;
 
         const UserExist =await Driver.findOne({email});
         if(UserExist){
-            return res.status(400).send({msg:"User Already Exists"});
+            return res.status(400).send({message:"User Already Exists"});
         }
-        const newUser = await Driver.create({username,contact,email,password,city,vehicleNo});
+        const newUser = await Driver.create({username,phone,email,password,city,vehicleNo});
 
         res.status(200).send({
             msg:"Registration Completed",
@@ -54,7 +54,8 @@ const registerDriver = async(req,res) =>{
         });
     }
     catch(e){
-        next(e);
+        console.log(e);
+        // next(e);
     }
 }
 
@@ -65,7 +66,7 @@ const loginUser = async(req,res) =>{
         const {email,password} = req.body;
         const UserExist = await User.findOne({email});
         if(!UserExist){
-            return res.status(400).send({msg:"Invalid Credentials"});
+            return res.status(400).send({message:"Invalid Credentials"});
         }
         else{
             const user = await UserExist.ComparePassword(password);
@@ -78,7 +79,7 @@ const loginUser = async(req,res) =>{
                 });
             }
             else{
-                res.status(401).send({msg:"Invalid email or password"});
+                res.status(401).json({message:"Invalid email or password"});
             }
         }
     }
@@ -94,7 +95,7 @@ const loginDriver = async(req,res) =>{
         const {email,password} = req.body;
         const UserExist = await Driver.findOne({email});
         if(!UserExist){
-            return res.status(400).send({msg:"Invalid Credentials"});
+            return res.status(400).send({message:"Invalid Credentials"});
         }
         else{
             const user = await UserExist.ComparePassword(password);
@@ -107,7 +108,7 @@ const loginDriver = async(req,res) =>{
                 });
             }
             else{
-                res.status(401).send({msg:"Invalid email or password"});
+                res.status(401).send({message:"Invalid email or password"});
             }
         }
     }
@@ -125,4 +126,19 @@ const about = async(req,res) =>{
     }
 }
 
-module.exports={home,registerUser,loginUser,about,registerDriver,loginDriver};
+/*-------
+---------User---------
+-------*/
+
+const user = async(req,res) =>{
+    try{
+        const userData=req.user //Contains all our data
+        console.log("Auth controller side:- ",userData)
+        res.status(200).json({userData})
+    }
+    catch(err){
+        res.status(400).json({msg : "Error in fetching data"})
+    }
+}
+
+module.exports={home,registerUser,loginUser,about,registerDriver,loginDriver,user};

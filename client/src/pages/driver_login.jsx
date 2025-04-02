@@ -29,7 +29,7 @@ export const Driverlogin = () => {
         console.log(driver);
 
         try {
-            const response = await fetch(`${API}/api/auth/login`, {
+            const response = await fetch(`${API}/api/auth/login/driverLogin`, {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json",

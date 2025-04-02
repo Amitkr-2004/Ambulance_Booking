@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    contact:{
+    phone:{
         type:String,
         required:true,
     },
@@ -64,13 +64,13 @@ userSchema.methods.ComparePassword = async function(password){
 userSchema.methods.generateToken = async function(){
     try{
         return jwt.sign({
-            usedId:this._id.toString(),
+            userId:this._id.toString(),
             email:this.email,
             isAdmin:this.isAdmin
         },
         process.env.SECRET_KEY,
         {
-            expiresIn:'30d',
+            expiresIn:'30d'
         }
     );
     }

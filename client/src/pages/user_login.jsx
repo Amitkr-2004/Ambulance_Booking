@@ -29,7 +29,7 @@ export const Userlogin = () =>{
         console.log(user);
 
         try {
-            const response = await fetch(`${API}/api/auth/login/user-login`,{
+            const response = await fetch(`${API}/api/auth/login/userLogin`,{
                 method: "POST",
                 headers:{
                     'Content-Type': "application/json",

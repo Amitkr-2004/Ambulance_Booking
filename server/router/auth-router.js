@@ -7,13 +7,13 @@ const authMiddleware=require("../middlewares/auth-middleware")
 
 router.route("/").get(authController.home);
 
-router.route("/register/user-registration").post(validate(UserSignupSchema),authController.registerUser);
+router.route("/register/userRegistration").post(validate(UserSignupSchema),authController.registerUser);
 
-router.route("/login/user-login").post(validate(UserLoginSchema),authController.loginUser);
+router.route("/login/userLogin").post(validate(UserLoginSchema),authController.loginUser);
 
-router.route("/register/driver-registration").post(validate(DriverSignupSchema),authController.registerDriver);
+router.route("/register/driverRegistration").post(validate(DriverSignupSchema),authController.registerDriver);
 
-router.route("/login/driver-login").post(validate(DriverLoginSchema),authController.loginDriver);
+router.route("/login/driverLogin").post(validate(DriverLoginSchema),authController.loginDriver);
 
 router.route("/user").get(authMiddleware,authController.user);
 

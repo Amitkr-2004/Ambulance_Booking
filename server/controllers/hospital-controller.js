@@ -11,15 +11,20 @@ const hospitalForm = async(req,res) =>{
     }
 }
 
-const hospitalInfo = async(req,res) =>{
-    try{
-        const city='patna';
-        const hospitalData=await Hospital.find({city});
-        return res.status(200).send({msg:hospitalData});
+const hospitalInfo = async (req, res) => {
+    
+    try {
+        const city = req.query.city; // Get city from query parameter (?city=...)
+        if (!city) {
+            return res.status(400).json({ msg: "City parameter is required" });
+        }
+
+        const hospitalData = await Hospital.find({ city });
+        return res.status(200).json(hospitalData);
+    } 
+    catch (error) {
+        return res.status(500).json({ msg: "Error in fetching data"});
     }
-    catch(e){
-        res.status(500).send({msg:"Error in fetching data"});
-    }
-}
+};
 
 module.exports = {hospitalForm,hospitalInfo};

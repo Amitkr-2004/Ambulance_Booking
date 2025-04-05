@@ -11,7 +11,7 @@
 :root {
   --bg-color: #f4f3ff;
   --btn-color: #646cff;
-  --btn-color2: white;
+  --btn-color2: f4f3ff;
   --dark-color: #242424;
   --helper-color: #99b9ff;
 }
@@ -157,7 +157,7 @@ a.active {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--btn-color);
   }
 }
 

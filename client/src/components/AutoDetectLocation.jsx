@@ -1,3 +1,9 @@
+ 
+
+
+
+// ******** ALSO READ the docs. *******
+
 import React, { useState } from 'react';
 
 const AutoDetectLocation = ({ onLocationDetected }) => {
@@ -36,7 +42,7 @@ const AutoDetectLocation = ({ onLocationDetected }) => {
 
   // Function to convert coordinates to a readable address
   const reverseGeocode = async (latitude, longitude) => {
-    const apiKey = 'AlzaSyEdpPdwTcPvcaNtMzDO7qj_Vdi4ppipcsJ'; // Replace with your API key
+    const apiKey = 'AlzaSy6ke6zPMuXYK7NPmZN3J-77YCGs23JsgKq'; // Replace with your API key
     // Geocode api: used to convert latitude and longitude coordinates into readable address.
     const apiUrl = `https://maps.gomaps.pro/maps/api/geocode/json?key=${apiKey}&latlng=${latitude},${longitude}`;   
 

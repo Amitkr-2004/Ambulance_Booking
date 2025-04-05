@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaAmbulance, FaPlane, FaUserFriends } from 'react-icons/fa';
 import { useAuth } from "../store/auth"; // Import the auth context
@@ -7,7 +7,12 @@ export const Seeprices = () => {
   const location = useLocation();
   const { locationState } = useAuth(); // Get location state from context
   const navigate = useNavigate();
-  
+
+  const mapRef = useRef(null); // Ref for the map container
+  // State for map initialization
+  const [map, setMap] = useState(null);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const scriptRef = useRef(null); // Ref for the Google Maps script
 
   // Priority: Use location.state if available (direct navigation), otherwise use context
   const { pickup: routePickup, drop: routeDrop } = location.state || {};
@@ -17,7 +22,76 @@ export const Seeprices = () => {
   const pickup = routePickup || contextPickup || 'Unknown Location';
   const drop =   dropoffHospital || 'Unknown Destination';
   
+  //   ******   Problem to say to interviewer: docs doesnt has examples to integrate google maps with react. its a strategic task to use the standard documentation and integrate it with react.  Notice deviations from the standard documentation. because the React implementation differs strategically.
 
+
+  // ****** Strategic Discussion Points to say to interviewer:(resarch and say)
+// When asked about differences, structure your answer as:
+
+// Acknowledge Standard Approach
+// "The documentation suggests this basic implementation..."  // READ THE  DOCS (HIGHLY IMPORTANT : https://developers.google.com/maps/documentation/javascript/overview)
+
+// Identify React-Specific Challenges
+// "But in React we face three unique problems:
+// a) Lifecycle management
+// b) Strict mode behaviors
+// c) HMR rehydration"
+
+// Show Solution Evolution
+// "This led me to implement a three-phase loading process:
+// Phase 1: Script injection with ref tracking
+// Phase 2: Callback state synchronization
+// Phase 3: Cleanup guards"
+
+// Reference Community Patterns
+// "The React wrapper library (@react-google-maps/api) actually uses similar techniques, as seen in their source..."
+
+  // Initialize map when component mounts
+
+   useEffect(() => {
+    // Check if script is already loaded
+    if (window.google) {   // When the Google Maps JavaScript API loads successfully, it attaches its main object to window.google.
+      setScriptLoaded(true);
+      return;
+    }
+
+    // Create script element
+    scriptRef.current = document.createElement('script');
+    scriptRef.current.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyACTHojBOulVmB2ZJKlYE5jyNF4Yu0s4Go&callback=initMap`;
+    scriptRef.current.async = true;
+    scriptRef.current.defer = true;
+    
+    // Define the global callback
+    window.initMap = () => setScriptLoaded(true); // State management
+
+    document.head.appendChild(scriptRef.current);
+
+    return () => {
+      // Cleanup function
+      if (scriptRef.current) {
+        document.head.removeChild(scriptRef.current);
+      }
+      delete window.initMap;
+    };
+  }, []);
+
+    // Initialize map when script loads : https://developers.google.com/maps/documentation/javascript/reference/map#Map
+  useEffect(() => {
+    if (!scriptLoaded || !mapRef.current) return;
+
+    
+    const newMap = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 25.5941, lng: 85.1376  },
+      zoom: 15,
+      mapTypeId: "roadmap"
+    });
+    newMap.setTilt(45);
+    setMap(newMap);
+
+    return () => {
+      // Additional cleanup if needed
+    };
+  }, [scriptLoaded]);
 
 
   const [service, setService] = useState("Ambulance");
@@ -53,14 +127,17 @@ export const Seeprices = () => {
       {/* Full-width container */}
       <div className="container mx-auto p-8">
         {/* Flex container for map and services */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="w-full flex flex-col lg:flex-row  gap-8 justify-between">
           {/* Map Section (Left Side) */}
-          <div className="lg:w-1/2">
-            <img
-              src="/images/map.png"
-              alt="Map"
-              className="w-full rounded-lg"
-            />
+          <div className="">
+            {/* Map container - replaces the image */}
+            <div 
+        ref={mapRef} 
+        className="w-5xl h-[500px] rounded-lg"
+        style={{ backgroundColor: '#e5e7eb' }}
+      >
+        {!scriptLoaded && <div className="flex items-center justify-center h-full">Loading map...</div>}
+      </div>
             {/* Display pickup and drop locations */}
             <div className="mt-4 p-4 bg-white text-black rounded-lg shadow">
               <p className="font-semibold">Pickup: <span className="font-normal">{pickup}</span></p>

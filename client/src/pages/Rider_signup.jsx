@@ -34,7 +34,7 @@ export const RiderSignup = () =>{
         console.log(user);
 
         try {
-            const response = await fetch(`${API}/api/auth/register/user-registration`,{
+            const response = await fetch(`${API}/api/auth/register/userRegistration`,{
                 method: "POST", 
                 headers:{
                     'Content-Type': "application/json",

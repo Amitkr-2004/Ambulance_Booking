@@ -35,7 +35,7 @@ export const DriverSignup = () =>{
         console.log(user);
 
         try {
-            const response = await fetch(`${API}/api/auth/register/driver-registration`,{
+            const response = await fetch(`${API}/api/auth/register/driverRegistration`,{
                 method: "POST", 
                 headers:{
                     'Content-Type': "application/json",

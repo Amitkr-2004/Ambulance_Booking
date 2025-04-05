@@ -4,9 +4,10 @@ import { Analytics } from "../components/Analytics";
 import LocationAutocomplete from "../components/LocationAutocomplete";
 import { useAuth } from "../store/auth"; // Import the auth context
 
+
 export const Home = () => {
   // Get location state and updater function from auth context
-  const { locationState, setLocationState,isLoggedIn } = useAuth();
+  const { locationState, setLocationState, isLoggedIn } = useAuth();
     const { pickup, dropoffCity, dropoffHospital } = locationState;
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -50,11 +51,16 @@ export const Home = () => {
 
   // Handle navigation to See Prices page
   const handleSeePrices = () => {
-    // Validate inputs
-    if(!isLoggedIn){
+    //token validation
+    // console.log(authorizationToken);
+    // console.log("hi");
+    if (!isLoggedIn) {
       navigate('/register');
-    }  
-  
+      return;
+    }
+
+
+    // Validate inputs
     if (!pickup) {
       setError("Please enter pickup location");
       return;
@@ -70,7 +76,7 @@ export const Home = () => {
         pickup: pickup.description || pickup,
         drop:  dropoffHospital
       } 
-    });    
+    });
   };
 
   return (

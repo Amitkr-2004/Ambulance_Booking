@@ -1,3 +1,6 @@
+// ******** ALSO READ the docs. *******
+
+
 import React, { useState, useRef, useEffect } from "react";
 import AutoDetectLocation from './AutoDetectLocation';
 import { useAuth } from "../store/auth"; // Import the auth context
@@ -13,7 +16,7 @@ const LocationAutocomplete = ({ onSelect, value }) => {
   const [error, setError] = useState("");
   const dropdownRef = useRef(null);
 
-  const apiKey = "AlzaSyEdpPdwTcPvcaNtMzDO7qj_Vdi4ppipcsJ";
+  const apiKey = "AlzaSy6ke6zPMuXYK7NPmZN3J-77YCGs23JsgKq";
 
   // Fetch location suggestions from API
   const fetchSuggestions = async (query) => {
